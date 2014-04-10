@@ -45,9 +45,9 @@ Client::master()
 }
 
 void
-Client::sleep()
+Client::wait()
 {
-     send(SLEEP, sizeof SLEEP);
+     send(WAIT, sizeof WAIT);
 }
 
 void
@@ -69,6 +69,8 @@ Client::thread(int32_t fd, uint32_t rAddr, bool *alive)
 
                recv = cli.recv(buf, sizeof buf - 1);
                buf[recv] = '\0';
+
+               std::cout << "TCP: " << buf << std::endl; // debug
 
                try {
                     TcpParser parser(cli, buf);

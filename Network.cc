@@ -91,6 +91,7 @@ Network::recvfrom(void *buf, size_t buflen, int32_t flags)
      if (remoteAddr_->sin_addr.s_addr != env::client->getRemoteAddr())
           throw NetworkException(5, EACCES);
 
+     std::cout << "UDP: " << (char *) buf << std::endl; // debug
      return buflen;
 }
 

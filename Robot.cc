@@ -25,9 +25,9 @@ Robot::init(char mode)
      char rd[11];
      char r = 'r';
 
-     //send(&r, 1);
-     //read(&rd, 11);
-     //send(&mode, 1);
+     send(&r, 1);
+     read(&rd, 11);
+     send(&mode, 1);
      std::this_thread::sleep_for(std::chrono::seconds(1));
 
      env::posAxes.b = 0;
@@ -37,19 +37,42 @@ Robot::init(char mode)
      env::posAxes.r = 0;
      env::posAxes.t = 0;
 
-     env::flag = 0;
-
      // Positionnement du robot en position initial
-     //move(POSINIT);
+     env::move = POSINIT;
+     move();
+
+     env::move.clear();
+     env::flag = 0;
 }
 
 void
-Robot::move(std::string cmd)
+Robot::move()
 {
      char buf[2];
 
-     send(cmd.data(), cmd.size());
+     send(env::move.data(), env::move.size());
      read(buf, sizeof buf);
+
+     env::posAxes.b += env::mvAxes[0].b;
+     env::posAxes.c += env::mvAxes[0].c;
+     env::posAxes.e += env::mvAxes[0].e;
+     env::posAxes.p += env::mvAxes[0].p;
+     env::posAxes.r += env::mvAxes[0].r;
+     env::posAxes.t += env::mvAxes[0].t;
+
+     env::mvAxes[0].b = 0;
+     env::mvAxes[0].c = 0;
+     env::mvAxes[0].e = 0;
+     env::mvAxes[0].p = 0;
+     env::mvAxes[0].r = 0;
+     env::mvAxes[0].t = 0;
+
+     env::mvAxes[1].b = 0;
+     env::mvAxes[1].c = 0;
+     env::mvAxes[1].e = 0;
+     env::mvAxes[1].p = 0;
+     env::mvAxes[1].r = 0;
+     env::mvAxes[1].t = 0;
 }
 
 ssize_t
@@ -114,7 +137,8 @@ Robot::thread()
           if (env::flag == 2) {
                env::flag = 1;
 
-               //move(env::move);
+               std::cout << "env::move = " << env::move << std::endl; // debug
+               Hercule.move();
                env::move.clear();
 
                env::flag = 0;

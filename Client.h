@@ -10,7 +10,7 @@
 #define MODE_M 3
 
 #define MASTER "MASTER\n"
-#define SLEEP "SLEEP\n"
+#define WAIT "WAIT\n"
 
 #define NET_BUFLEN 64
 #define TCP_TIMEOUT 60000
@@ -24,7 +24,7 @@ public:
      void setID(std::string id);
      void setMode(uint8_t mode);
      void master();
-     void sleep();
+     void wait();
 
      static void thread(int32_t fd, uint32_t rAddr, bool *alive);
 

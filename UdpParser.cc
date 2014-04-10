@@ -18,8 +18,6 @@ UdpParser::checkMove(char *move, char **posss)
 {
      char *i, *find;
 
-     std::cout << move << "t" << std::endl; // debug
-
      find = std::strpbrk(move, "BCEPRT");
 
      if (find != &move[0])
@@ -56,8 +54,6 @@ UdpParser::parse()
      size_t numc;
      int16_t div, ipos, isp;
      char *buf, *cmd, *posss;
-
-     std::cout << data_ << std::endl; // debug
 
      cmd = std::strtok((char *) data_.data(), ";");
      
@@ -105,8 +101,6 @@ UdpParser::parse()
      }
 
      env::move.push_back('\n');
-     
-     std::cout << "move = " << env::move << std::endl; // debug
 }
 
 int16_t

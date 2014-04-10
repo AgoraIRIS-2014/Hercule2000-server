@@ -31,7 +31,7 @@ main()
      config::maxClients = 2;
      config::netAddr = "*";
      config::camAddr = "192.168.0.35";
-     config::serialDev = "/dev/ttyUSB0";
+     config::serialDev = "/dev/ttyS0";
      config::tcpPort = 4242;
      config::udpPort = 42117;
 
