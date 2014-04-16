@@ -11,12 +11,12 @@
 Serial::Serial(std::string dev, const struct termios& serialConf)
 {
      // Ouverture du fichier associé au port série
-     fd_ = std::open(dev.data(), O_RDWR | O_NOCTTY);
+     //fd_ = std::open(dev.data(), O_RDWR | O_NOCTTY);
      //std::cout << "fd_ = " << fd_ << std::endl; // debug
      // Sauvegarde des paramètres initiaux du port série
-     std::tcgetattr(fd_, &sysSerialConf_);
+     //std::tcgetattr(fd_, &sysSerialConf_);
      //
-     std::tcsetattr(fd_, TCSANOW, &serialConf);
+     //std::tcsetattr(fd_, TCSANOW, &serialConf);
 }
 
 Serial::~Serial()

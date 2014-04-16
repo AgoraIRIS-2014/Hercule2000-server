@@ -91,7 +91,6 @@ Network::recvfrom(void *buf, size_t buflen, int32_t flags)
      if (remoteAddr_->sin_addr.s_addr != env::client->getRemoteAddr())
           throw NetworkException(5, EACCES);
 
-     std::cout << "UDP: " << (char *) buf << std::endl; // debug
      return buflen;
 }
 
@@ -114,36 +113,28 @@ Network::tcpThread()
 void
 Network::udpThread()
 {
-     socklen_t buflen;
      char buf[NET_BUFLEN];
-     bool out;
  
      Network net(UDP, config::udpPort);
 
      for (;;) {
           try {
-               buflen = net.recvfrom(buf, sizeof buf);
-               buf[buflen] = '\0';
+               net.recvfrom(buf, sizeof buf);
                
-               try {
-                    out = false;
-                    while (out == false) {
-                         env::mtx.lock();
-                         if (env::flag == 0) {
-                              env::flag = 1;
-
-                              UdpParser parser(buf);
-                              parser.check();
-                              parser.parse();
-
-                              env::flag = 2;
-                              out = true;
-                         }
-                         env::mtx.unlock();
+               env::mtx.lock();
+               //std::cout << "Network::udpthread lock" << std::endl; // debug
+               if (env::flag == 0) {
+                    try {
+                         UdpParser parser(buf);
+                         parser.check();
+                         parser.parse();
+                         env::flag = 1;
+                    } catch (const ParserException& e) {
+                         std::cerr << e.what() << std::endl;
                     }
-               } catch (const ParserException& e) {
-                    std::cerr << e.what() << std::endl;
                }
+               //std::cout << "Network::udpthread unlock" << std::endl; // debug
+               env::mtx.unlock();
           } catch (const NetworkException& e) {
                std::cerr << e.what() << std::endl;
           }

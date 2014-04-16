@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <list>
 #include <mutex>
 #include <string>

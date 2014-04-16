@@ -9,9 +9,7 @@
 
 #include <iostream> // debug
 
-UdpParser::UdpParser(const char *data) : Parser(data)
-{
-}
+UdpParser::UdpParser(const char *data) : Parser(data) {}
 
 void
 UdpParser::checkMove(char *move, char **posss)
