@@ -3,10 +3,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <thread>
-#include "c/fcntl.h"
-#include "c/poll.h"
-#include "Socket.h"
-#include "SocketException.h"
+#include "c/fcntl.hh"
+#include "c/poll.hh"
+#include "Socket.hh"
+#include "SocketException.hh"
 
 Socket::Socket(int32_t domain, int32_t type, int32_t protocol)
 {

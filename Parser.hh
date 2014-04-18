@@ -1,8 +1,8 @@
 #include <string>
-#include "InetSocket.h"
+#include "InetSocket.hh"
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef PARSER_HH
+#define PARSER_HH
 
 class Parser {
 public:

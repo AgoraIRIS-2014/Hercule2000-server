@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <string>
 #include <netinet/in.h>
-#include "c/arpa/inet.h"
-#include "InetSocket.h"
+#include "c/arpa/inet.hh"
+#include "InetSocket.hh"
 
 InetSocket::InetSocket(int32_t type, int32_t protocol)
      : Socket(PF_INET, type, protocol),

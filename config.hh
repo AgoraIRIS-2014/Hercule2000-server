@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <string>
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIG_HH
+#define CONFIG_HH
 
 struct config {
      static std::string camAddr;

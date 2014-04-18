@@ -1,10 +1,10 @@
 #include <cerrno>
 #include <string>
-#include "config.h"
-#include "env.h"
-#include "Client.h"
-#include "TcpParser.h"
-#include "TcpParserException.h"
+#include "config.hh"
+#include "env.hh"
+#include "Client.hh"
+#include "TcpParser.hh"
+#include "TcpParserException.hh"
 
 #include <iostream> // debug
 

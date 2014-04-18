@@ -1,8 +1,8 @@
 #include <cstdint>
-#include "SocketException.h"
+#include "SocketException.hh"
 
-#ifndef INETSOCKETEXCEPTION_H
-#define INETSOCKETEXCEPTION_H
+#ifndef INETSOCKETEXCEPTION_HH
+#define INETSOCKETEXCEPTION_HH
 
 class InetSocketException : public SocketException {
 public:

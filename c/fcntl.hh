@@ -1,7 +1,7 @@
 #include <fcntl.h>
 
-#ifndef C_FCNTL_H
-#define C_FCNTL_H
+#ifndef C_FCNTL_HH
+#define C_FCNTL_HH
 
 namespace std
 {

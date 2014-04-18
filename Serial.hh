@@ -2,10 +2,10 @@
 #include <cstdint>
 #include <string>
 #include <sys/types.h>
-#include "c/termios.h"
+#include "c/termios.hh"
 
-#ifndef SERIAL_H
-#define SERIAL_H
+#ifndef SERIAL_HH
+#define SERIAL_HH
 
 class Serial {
 public:

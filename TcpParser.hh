@@ -1,8 +1,8 @@
-#include "Client.h"
-#include "Parser.h"
+#include "Client.hh"
+#include "Parser.hh"
 
-#ifndef TCPPARSER_H
-#define TCPPARSER_H
+#ifndef TCPPARSER_HH
+#define TCPPARSER_HH
 
 #define HP "HP"
 

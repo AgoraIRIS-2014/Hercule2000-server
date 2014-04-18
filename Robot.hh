@@ -1,10 +1,10 @@
 #include <cstdint>
 #include <string>
 #include <sys/types.h>
-#include "Serial.h"
+#include "Serial.hh"
 
-#ifndef ROBOT_H
-#define ROBOT_H
+#ifndef ROBOT_HH
+#define ROBOT_HH
 
 #define ROB_BUFLEN 11
 #define POSINIT "B+0:30E+0:30C+0:30T+0:30R+0:30P-511:8\n" 

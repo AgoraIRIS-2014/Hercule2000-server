@@ -3,11 +3,11 @@
 #include <string>
 #include <thread>
 #include <sys/types.h>
-#include "c/termios.h"
-#include "config.h"
-#include "env.h"
-#include "Client.h"
-#include "Robot.h"
+#include "c/termios.hh"
+#include "config.hh"
+#include "env.hh"
+#include "Client.hh"
+#include "Robot.hh"
 
 #include <iostream> // debug
 

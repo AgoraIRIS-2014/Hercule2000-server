@@ -1,10 +1,10 @@
 #include <cstddef>
 #include <string>
 #include <sys/types.h>
-#include "c/fcntl.h"
-#include "c/termios.h"
-#include "c/unistd.h"
-#include "Serial.h"
+#include "c/fcntl.hh"
+#include "c/termios.hh"
+#include "c/unistd.hh"
+#include "Serial.hh"
 
 #include <iostream> //debug
 

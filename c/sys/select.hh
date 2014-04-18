@@ -1,7 +1,7 @@
 #include <sys/select.h>
 
-#ifndef C_SYS_SELECT_H
-#define C_SYS_SELECT_H
+#ifndef C_SYS_SELECT_HH
+#define C_SYS_SELECT_HH
 
 namespace std
 {

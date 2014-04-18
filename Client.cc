@@ -3,13 +3,13 @@
 #include <iostream>
 #include <string>
 #include <sys/types.h>
-#include "config.h"
-#include "env.h"
-#include "SocketException.h"
-#include "Client.h"
-#include "ClientException.h"
-#include "TcpParser.h"
-#include "TcpParserException.h"
+#include "config.hh"
+#include "env.hh"
+#include "SocketException.hh"
+#include "Client.hh"
+#include "ClientException.hh"
+#include "TcpParser.hh"
+#include "TcpParserException.hh"
 
 Client::Client(int32_t fd) : InetSocket(fd), mode_(0) {}
 

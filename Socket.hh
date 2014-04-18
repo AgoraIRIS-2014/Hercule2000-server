@@ -1,10 +1,10 @@
 #include <cstddef>
 #include <cstdint>
-#include "c/poll.h"
-#include "c/sys/socket.h"
+#include "c/poll.hh"
+#include "c/sys/socket.hh"
 
-#ifndef SOCKET_H
-#define SOCKET_H
+#ifndef SOCKET_HH
+#define SOCKET_HH
 
 class Socket {
 public:

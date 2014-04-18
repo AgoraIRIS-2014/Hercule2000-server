@@ -1,7 +1,7 @@
 #include <termios.h>
 
-#ifndef C_TERMIOS_H
-#define C_TERMIOS_H
+#ifndef C_TERMIOS_HH
+#define C_TERMIOS_HH
 
 namespace std
 {

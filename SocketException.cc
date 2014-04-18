@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <cstring>
-#include "SocketException.h"
+#include "SocketException.hh"
 
 SocketException::SocketException(int32_t number, int32_t nerror) throw()
      :  nerror_(nerror), number_(number)

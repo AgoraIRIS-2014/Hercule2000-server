@@ -2,11 +2,11 @@
 #include <list>
 #include <mutex>
 #include <string>
-#include "botaxes.h"
-#include "Client.h"
+#include "botaxes.hh"
+#include "Client.hh"
 
-#ifndef ENV_H
-#define ENV_H
+#ifndef ENV_HH
+#define ENV_HH
 
 struct env {
      static std::list<Client *> cliQueue;

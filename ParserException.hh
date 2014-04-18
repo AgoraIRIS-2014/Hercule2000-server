@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <exception>
 
-#ifndef SOCKETEXCEPTION_H
-#define SOCKETEXCEPTION_H
+#ifndef PARSEREXCEPTION_HH
+#define PARSEREXCEPTION_HH
 
 class ParserException : public std::exception {
 public:

@@ -1,8 +1,8 @@
 #include <cstdint>
-#include "ParserException.h"
+#include "ParserException.hh"
 
-#ifndef TCPPARSEREXCEPTION_H
-#define TCPPARSEREXCEPTION_H
+#ifndef TCPPARSEREXCEPTION_HH
+#define TCPPARSEREXCEPTION_HH
 
 class TcpParserException : public ParserException {
 public:

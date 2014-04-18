@@ -1,10 +1,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <list> 
-#include "InetSocket.h"
+#include "InetSocket.hh"
 
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef NETWORK_HH
+#define NETWORK_HH
 
 #define NET_BUFLEN 64
 #define TCP SOCK_STREAM

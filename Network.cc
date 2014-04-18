@@ -6,14 +6,14 @@
 #include <mutex>
 #include <thread>
 #include <sys/types.h>
-#include "config.h"
-#include "env.h"
-#include "Client.h"
-#include "Network.h"
-#include "NetworkException.h"
-#include "SocketException.h"
-#include "UdpParser.h"
-#include "UdpParserException.h"
+#include "config.hh"
+#include "env.hh"
+#include "Client.hh"
+#include "Network.hh"
+#include "NetworkException.hh"
+#include "SocketException.hh"
+#include "UdpParser.hh"
+#include "UdpParserException.hh"
 
 Network::Network(int32_t type, uint16_t port) : InetSocket(type, 0)
 {

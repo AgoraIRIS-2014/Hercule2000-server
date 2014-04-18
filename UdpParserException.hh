@@ -1,8 +1,8 @@
 #include <cstdint>
-#include "ParserException.h"
+#include "ParserException.hh"
 
-#ifndef UDPPARSEREXCEPTION_H
-#define UDPPARSEREXCEPTION_H
+#ifndef UDPPARSEREXCEPTION_HH
+#define UDPPARSEREXCEPTION_HH
 
 class UdpParserException : public ParserException {
 public:

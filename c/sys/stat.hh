@@ -1,7 +1,7 @@
 #include <sys/stat.h>
 
-#ifndef C_SYS_STAT_H
-#define C_SYS_STAT_H
+#ifndef C_SYS_STAT_HH
+#define C_SYS_STAT_HH
 
 namespace std
 {

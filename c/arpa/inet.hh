@@ -1,7 +1,7 @@
 #include <arpa/inet.h>
 
-#ifndef C_ARPA_INET_H
-#define C_ARPA_INET_H
+#ifndef C_ARPA_INET_HH
+#define C_ARPA_INET_HH
 
 namespace std
 {

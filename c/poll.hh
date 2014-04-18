@@ -1,7 +1,7 @@
 #include <poll.h>
 
-#ifndef C_POLL_H
-#define C_POLL_H
+#ifndef C_POLL_HH
+#define C_POLL_HH
 
 namespace std
 {

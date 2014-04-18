@@ -1,8 +1,8 @@
 #include <string>
-#include "Parser.h"
+#include "Parser.hh"
 
-#ifndef UDPPARSER_H
-#define UDPPARSER_H
+#ifndef UDPPARSER_HH
+#define UDPPARSER_HH
 
 class UdpParser : public Parser {
 public:

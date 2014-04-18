@@ -1,5 +1,5 @@
-#ifndef BOTAXES_H
-#define BOTAXES_H
+#ifndef BOTAXES_HH
+#define BOTAXES_HH
 
 struct botaxes {
      int16_t b;

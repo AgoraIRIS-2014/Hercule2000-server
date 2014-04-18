@@ -1,7 +1,7 @@
 #include <unistd.h>
 
-#ifndef C_UNISTD_H
-#define C_UNISTD_H
+#ifndef C_UNISTD_HH
+#define C_UNISTD_HH
 
 namespace std
 {

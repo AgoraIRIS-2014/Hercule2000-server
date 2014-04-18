@@ -1,7 +1,7 @@
 #include <sys/socket.h>
 
-#ifndef C_SYS_SOCKET_H
-#define C_SYS_SOCKET_H
+#ifndef C_SYS_SOCKET_HH
+#define C_SYS_SOCKET_HH
 
 namespace std
 {

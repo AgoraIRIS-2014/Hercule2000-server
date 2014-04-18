@@ -3,11 +3,11 @@
 #include <list>
 #include <string>
 #include <thread>
-#include "config.h"
-#include "env.h"
-#include "Client.h"
-#include "Network.h"
-#include "Robot.h"
+#include "config.hh"
+#include "env.hh"
+#include "Client.hh"
+#include "Network.hh"
+#include "Robot.hh"
 
 #include <iostream> // debug
 

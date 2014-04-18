@@ -1,10 +1,10 @@
 #include <cstdint>
 #include <string>
 #include <netinet/in.h>
-#include "Socket.h"
+#include "Socket.hh"
 
-#ifndef INETSOCKET_H
-#define INETSOCKET_H
+#ifndef INETSOCKET_HH
+#define INETSOCKET_HH
 
 class InetSocket : public Socket {
 public:

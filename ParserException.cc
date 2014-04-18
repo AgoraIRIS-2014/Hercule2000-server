@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <cstring>
-#include "ParserException.h"
+#include "ParserException.hh"
 
 ParserException::ParserException(int32_t number, int32_t nerror) throw()
      : nerror_(nerror), number_(number)

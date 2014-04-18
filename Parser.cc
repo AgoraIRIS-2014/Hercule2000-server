@@ -1,8 +1,8 @@
 #include <cerrno>
 #include <string>
-#include "InetSocket.h"
-#include "Parser.h"
-#include "ParserException.h"
+#include "InetSocket.hh"
+#include "Parser.hh"
+#include "ParserException.hh"
 
 #include <iostream> // debug
 

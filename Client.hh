@@ -1,10 +1,10 @@
 #include <cstdint>
 #include <fstream>
 #include <string>
-#include "InetSocket.h"
+#include "InetSocket.hh"
 
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef CLIENT_HH
+#define CLIENT_HH
 
 #define MODE_A 1
 #define MODE_L 2
