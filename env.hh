@@ -8,6 +8,8 @@
 #ifndef ENV_HH
 #define ENV_HH
 
+#define POSINIT "B+0:30E+0:30C+0:30T+0:30R+0:30P-511:8\n" 
+
 struct env {
      static std::list<Client *> cliQueue;
      static std::string move;
@@ -16,6 +18,8 @@ struct env {
      static struct botaxes posAxes;
      static struct botaxes mvAxes[2];
      static int8_t flag;
+
+     static void posinit();
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include "ParserException.hh"
 
 #ifndef UDPPARSEREXCEPTION_HH
@@ -6,7 +7,7 @@
 
 class UdpParserException : public ParserException {
 public:
-     UdpParserException(int32_t number, int32_t nerror) throw();
+     UdpParserException(std::string name, int32_t error) throw();
 };
 
 #endif

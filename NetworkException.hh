@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include "InetSocketException.hh"
 
 #ifndef NETWORKEXCEPTION_HH
@@ -6,7 +7,7 @@
 
 class NetworkException : public InetSocketException {
 public:
-     NetworkException(int32_t number, int32_t nerror) throw();
+     NetworkException(std::string name, int32_t error) throw();
 };
 
 #endif

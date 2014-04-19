@@ -1,7 +1,6 @@
 #include <cstdint>
+#include <string>
 #include "InetSocketException.hh"
 
-InetSocketException::InetSocketException(int32_t number, int32_t nerror) throw()
-     : SocketException(number, nerror)
-{
-}
+InetSocketException::InetSocketException(std::string name, int32_t error) throw()
+     : SocketException(name, error) {}

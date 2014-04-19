@@ -34,7 +34,7 @@ main()
      std::string cmd;
 
      config::camAddr = "192.168.0.35";
-     config::dir = "";
+     config::dir = "/tmp/hercule-final/";
      config::netAddr = "*";
      config::serialDev = "/dev/ttyUSB0";
      config::tmpdir = "/tmp/hercule/";
@@ -45,6 +45,8 @@ main()
      env::client = NULL;
      env::flag = -1;
 
+     cmd = "mkdir -p " + config::dir;
+     std::system(cmd.data());
      cmd = "mkdir -p " + config::tmpdir;
      std::system(cmd.data());
      cmd = "rm -f " + config::tmpdir + "*.h2kc";

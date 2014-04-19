@@ -16,7 +16,7 @@ Parser::check()
      fcp = data_.find_first_of('\n');
                
      if (fcp == std::string::npos)
-          throw ParserException(1, EINVAL);
+          throw ParserException("check", EINVAL);
      
      data_ = data_.substr(0, fcp);
      std::cout << data_ << std::endl; // debug

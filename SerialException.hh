@@ -2,12 +2,12 @@
 #include <exception>
 #include <string>
 
-#ifndef PARSEREXCEPTION_HH
-#define PARSEREXCEPTION_HH
+#ifndef SERIALEXCEPTION_HH
+#define SERIALEXCEPTION_HH
 
-class ParserException : public std::exception {
+class SerialException : public std::exception {
 public:
-     ParserException(std::string name, int32_t error) throw();
+     SerialException(std::string name, int32_t error) throw();
 
      virtual const char *what() const throw();
      int32_t getError() const throw();

@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include "InetSocketException.hh"
 
 #ifndef CLIENTEXCEPTION_HH
@@ -6,7 +7,7 @@
 
 class ClientException : public InetSocketException {
 public:
-     ClientException(int32_t number, int32_t nerror) throw();
+     ClientException(std::string name, int32_t error) throw();
 };
 
 #endif

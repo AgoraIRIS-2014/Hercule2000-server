@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include "ParserException.hh"
 
 #ifndef TCPPARSEREXCEPTION_HH
@@ -6,7 +7,7 @@
 
 class TcpParserException : public ParserException {
 public:
-     TcpParserException(int32_t number, int32_t nerror) throw();
+     TcpParserException(std::string name, int32_t error) throw();
 };
 
 #endif

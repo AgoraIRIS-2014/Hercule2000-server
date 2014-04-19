@@ -8,6 +8,7 @@
 #include "UdpParserException.hh"
 
 #include <iostream> // debug
+#include <thread> // debug
 
 UdpParser::UdpParser(const char *data) : Parser(data) {}
 
@@ -19,30 +20,30 @@ UdpParser::checkMove(char *move, char **posss)
      find = std::strpbrk(move, "BCEPRT");
 
      if (find != &move[0])
-          throw UdpParserException(2, EINVAL);
+          throw UdpParserException("checkMove", EINVAL);
 
      find = std::strpbrk(&move[1], "+-");
 
      if (find != &move[1])
-          throw UdpParserException(2, EINVAL);
+          throw UdpParserException("checkMove", EINVAL);
 
      *posss = std::strpbrk(&move[2], ":");
 
      if (*posss == &move[2] || *posss == NULL)
-          throw UdpParserException(2, EINVAL);
+          throw UdpParserException("checkMove", EINVAL);
 
      for (i = &move[2]; i < *posss; i++) {
           find = std::strpbrk(i, "0123456789");
 
           if (find != i)
-               throw UdpParserException(2, EINVAL);
+               throw UdpParserException("checkMove", EINVAL);
      }
 
      for (i = *posss + 1; i < &move[std::strlen(move)]; i++) {
           find = std::strpbrk(i, "0123456789");
 
           if (find != i)
-               throw UdpParserException(2, EINVAL);
+               throw UdpParserException("checkMove", EINVAL);
      }
 }
 
@@ -54,7 +55,7 @@ UdpParser::parse()
      char *buf, *cmd, *posss;
 
      cmd = std::strtok((char *) data_.data(), ";");
-     
+
      while (cmd != NULL) {
           checkMove(cmd, &posss);
 
@@ -143,7 +144,12 @@ UdpParser::parseMove(char *move, char *posss)
           ipos = env::posAxes.t + ipos;
           break;
      }
-     
+ 
+     if (ipos > 511)
+          ipos = 511;
+     else if (ipos < -511)
+          ipos = -511;
+
      return ipos;
 }
 

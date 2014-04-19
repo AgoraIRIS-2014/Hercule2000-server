@@ -1,26 +1,25 @@
 #include <cstdint>
 #include <cstring>
+#include <string>
 #include "ParserException.hh"
 
-ParserException::ParserException(int32_t number, int32_t nerror) throw()
-     : nerror_(nerror), number_(number)
-{
-}
+ParserException::ParserException(std::string name, int32_t error) throw()
+     : name_(name), error_(error) {}
 
 const char *
 ParserException::what() const throw()
 {
-     return std::strerror(nerror_);
+     return std::strerror(error_);
 }
 
 int32_t
-ParserException::getNerror() const throw()
+ParserException::getError() const throw()
 {
-     return nerror_;
+     return error_;
 }
 
-int32_t
-ParserException::getNumber() const throw()
+std::string
+ParserException::getName() const throw()
 {
-     return number_;
+     return name_;
 }

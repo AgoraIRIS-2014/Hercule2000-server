@@ -77,23 +77,6 @@ Network::close()
      }
 }
 
-ssize_t
-Network::recvfrom(void *buf, size_t buflen, int32_t flags)
-{
-     buflen = InetSocket::recvfrom(buf, buflen, flags);
-
-     if (env::client == NULL)
-          throw NetworkException(5, EACCES);
-
-     if (env::client->getMode() <= MODE_A)
-          throw NetworkException(5, EACCES);
-
-     if (remoteAddr_->sin_addr.s_addr != env::client->getRemoteAddr())
-          throw NetworkException(5, EACCES);
-
-     return buflen;
-}
-
 void
 Network::tcpThread()
 {
@@ -120,9 +103,18 @@ Network::udpThread()
      for (;;) {
           try {
                net.recvfrom(buf, sizeof buf);
-               
+
                env::mtx.lock();
-               //std::cout << "Network::udpthread lock" << std::endl; // debug
+               //std::cout << "Network::udpThread lock" << std::endl; // debug
+               if (env::client == NULL)
+                    throw NetworkException("udpThread", EACCES);
+
+               if (env::client->getMode() <= MODE_A)
+                    throw NetworkException("udpThread", EACCES);
+
+               if (net.getRemoteAddr() != env::client->getRemoteAddr())
+                    throw NetworkException("udpThread", EACCES);
+
                if (env::flag == 0) {
                     try {
                          UdpParser parser(buf);
@@ -133,9 +125,11 @@ Network::udpThread()
                          std::cerr << e.what() << std::endl;
                     }
                }
-               //std::cout << "Network::udpthread unlock" << std::endl; // debug
                env::mtx.unlock();
+               //std::cout << "Network::udpthread unlock" << std::endl; // debug
           } catch (const NetworkException& e) {
+               env::mtx.unlock();
+               //std::cout << "Network::udpthread unlock" << std::endl; // debug
                std::cerr << e.what() << std::endl;
           }
      }

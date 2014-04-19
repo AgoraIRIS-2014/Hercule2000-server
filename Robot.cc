@@ -8,6 +8,7 @@
 #include "env.hh"
 #include "Client.hh"
 #include "Robot.hh"
+#include "RobotException.hh"
 
 #include <iostream> // debug
 
@@ -17,28 +18,20 @@ Robot::Robot(const struct termios serialConf)
 Robot::~Robot() {}
 
 void
-Robot::init(char mode)
+Robot::init()
 {
-     char rd[11];
-     char r = 'r';
+     //char rd[11];
+     //char r = 'r';
+     //char l = 'L';
 
      //send(&r, 1);
      //read(&rd, 11);
-     //send(&mode, 1);
+     //send(&l, 1);
      std::this_thread::sleep_for(std::chrono::seconds(1));
-
-     env::posAxes.b = 0;
-     env::posAxes.c = 0;
-     env::posAxes.e = 0;
-     env::posAxes.p = 0;
-     env::posAxes.r = 0;
-     env::posAxes.t = 0;
-
+     
      // Positionnement du robot en position initial
-     env::move = POSINIT;
-     //move();
-     env::move.clear();
-
+     env::posinit();
+     move();
      env::flag = 0;
 }
 
@@ -46,6 +39,10 @@ void
 Robot::move()
 {
      int16_t buf;
+     
+     if (env::client != NULL && env::client->getMode() == MODE_L &&
+         !env::client->fileIsOpen())
+          throw RobotException("move", ENOENT);
 
      //send(env::move.data(), env::move.size());
      //read(&buf, sizeof buf);
@@ -55,7 +52,6 @@ Robot::move()
      buf = 0x0A; // debug
      // non testé 
      if (buf == 0x0A) {
-          //std::cout << "Move success !" << std::endl; // debug
           env::posAxes.b += env::mvAxes[0].b;
           env::posAxes.c += env::mvAxes[0].c;
           env::posAxes.e += env::mvAxes[0].e;
@@ -63,23 +59,11 @@ Robot::move()
           env::posAxes.r += env::mvAxes[0].r;
           env::posAxes.t += env::mvAxes[0].t;
           
-          if (env::client->getMode() == MODE_L)
+          if (env::client != NULL && env::client->getMode() == MODE_L)
                env::client->writeTmpFile(env::move);
      }
 
-     env::mvAxes[0].b = 0;
-     env::mvAxes[0].c = 0;
-     env::mvAxes[0].e = 0;
-     env::mvAxes[0].p = 0;
-     env::mvAxes[0].r = 0;
-     env::mvAxes[0].t = 0;
-
-     env::mvAxes[1].b = 0;
-     env::mvAxes[1].c = 0;
-     env::mvAxes[1].e = 0;
-     env::mvAxes[1].p = 0;
-     env::mvAxes[1].r = 0;
-     env::mvAxes[1].t = 0;
+     std::memset(&env::mvAxes, 0, sizeof env::mvAxes);
 
      env::move.clear();
 }
@@ -139,18 +123,24 @@ Robot::thread()
     
      Robot Hercule(serialConf);
      env::mtx.lock();
-     Hercule.init('L');
+     //std::cout << "Robot::thread lock 1" << std::endl; // debug
+     Hercule.init();
      env::mtx.unlock();
+     //std::cout << "Robot::thread lock 1" << std::endl; // debug
 
      for (;;) {
           env::mtx.lock();
-          //std::cout << "Robot::thread lock" << std::endl; // debug
-          if (env::flag == 1 && env::client != NULL) {
-               Hercule.move();
-
+          //std::cout << "Robot::thread lock 2" << std::endl; // debug
+          try {
+               if (env::flag == 1) {
+                    Hercule.move();
+                    env::flag = 0;
+               }
+          } catch (const RobotException& e) {
                env::flag = 0;
+               std::cerr << e.what() << std::endl;
           }
-          //std::cout << "Robot::thread unlock" << std::endl; // debug
           env::mtx.unlock();
+          //std::cout << "Robot::thread unlock 2" << std::endl; // debug
      }
 }

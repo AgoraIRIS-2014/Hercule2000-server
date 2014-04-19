@@ -3,36 +3,63 @@
 #include "config.hh"
 #include "env.hh"
 #include "Client.hh"
+#include "ClientException.hh"
 #include "TcpParser.hh"
 #include "TcpParserException.hh"
 
 #include <iostream> // debug
+#include <thread> // debug
 
-TcpParser::TcpParser(Client& cli, const char *data) : Parser(data), cli_(&cli)
-{
-}
+TcpParser::TcpParser(Client& cli, const char *data) : Parser(data), cli_(&cli) {}
 
 void
 TcpParser::parse()
 {
-     if (data_ == "HELLO")
-          helloRep(*cli_);
-     else if (!data_.compare(0, 3, "ID:"))
-          setMaster(data_.substr(3, std::string::npos), *cli_);
-     else if (data_ == "MODE:A")
-          cli_->setMode(MODE_A);
-     else if (data_ == "MODE:L")
-          cli_->setMode(MODE_L);     
-     else if (data_ == "MODE:M")
-          cli_->setMode(MODE_M);
-     else if (!data_.compare(0, 6, "FNAME:")) {
-          cli_->createTmpFile(data_.substr(6, std::string::npos));
-          cli_->send("OK\n", sizeof "OK\n");
-     } else if (data_ == "GET:LIST") {
-          std::string a = "LIST:aaaaaaaaa;bbbbbbbbbbb;cccccccccccc;dddddddddd;eeeeeeeeeeee;fffffffffff;ggggggggggggggg;hhhhhhhhhhhhh;Taaaaaaaa;Tbbbbbbbbbb;Tccccccccccc;Tddddddddd;Teeeeeeeeeee;Tffffffffff;Tgggggggggggggg;Thhhhhhhhhhhh;Eaaaaaaaa;Ebbbbbbbbbb;Eccccccccccc;Eddddddddd;Eeeeeeeeeeee;Effffffffff;Egggggggggggggg;EhhhhhhhhhhhhEOF\n"; // debug
-          cli_->send(a.data(), a.size());
-     } else if (data_ != "ALIVE")
-          throw TcpParserException(1, EINVAL);
+     int8_t mode = cli_->getMode();
+
+     if (data_ != "ALIVE") {
+          try {
+               if (mode < MODE_N) {
+
+                    if (data_ == "HELLO")
+                         helloRep(*cli_);
+                    else if (!data_.compare(0, 3, "ID:")) {
+                         setMaster(data_.substr(3, std::string::npos), *cli_);
+                         cli_->setMode(MODE_N);
+                    } else
+                         throw TcpParserException("parse", EINVAL);
+
+               } else {
+
+                    if (data_ == "MODE:A")
+                         cli_->setMode(MODE_A);
+                    else if (data_ == "MODE:L")
+                         cli_->setMode(MODE_L);
+                    else if (data_ == "MODE:M")
+                         cli_->setMode(MODE_M);
+                    else if (data_ == "GET:LIST")
+                         cli_->sendList();
+                    else if (mode == MODE_A);
+                    else if (mode == MODE_L) {
+
+                         if (!data_.compare(0, 9, "FILENAME:"))
+                              cli_->createTmpFile(data_.substr(9, std::string::npos));
+                         else if (data_ == "CHECKPOINT")
+                              cli_->makeFile();
+                         else if (data_ == "EOF") {
+                              cli_->makeFile();
+                              cli_->deleteTmpFile();
+                              env::posinit();
+                              env::flag = 1;
+                         }
+
+                    } else
+                         throw TcpParserException("parse", EINVAL);
+               }
+          } catch (const ClientException& e) {
+               throw TcpParserException("parse", e.getError());
+          }
+     }
 }
 
 void

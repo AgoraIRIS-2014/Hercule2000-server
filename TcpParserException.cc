@@ -1,7 +1,6 @@
 #include <cstdint>
+#include <string>
 #include "TcpParserException.hh"
 
-TcpParserException::TcpParserException(int32_t number, int32_t nerror) throw()
-     : ParserException(number, nerror)
-{
-}
+TcpParserException::TcpParserException(std::string name, int32_t error) throw()
+     : ParserException(name, error) {}

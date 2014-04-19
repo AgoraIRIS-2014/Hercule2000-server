@@ -29,7 +29,7 @@ Socket::Socket(int32_t fd)
      err = std::getsockname(poll_.fd, &lAddr_, &addrlen);
 
      if (err)
-          throw SocketException(1, errno);
+          throw SocketException("Socket", errno);
 }
 
 Socket::~Socket()
@@ -47,7 +47,7 @@ Socket::accept()
      fd = std::accept(poll_.fd, &rAddr_, &addrlen);
 
      if (fd == -1)
-          throw SocketException(2, errno);
+          throw SocketException("accept", errno);
      
      return fd;
 }
@@ -71,7 +71,7 @@ Socket::bind()
      }
 
      if (bind)
-          throw SocketException(3, errno);
+          throw SocketException("bind", errno);
 
      return bind;
 }
@@ -90,7 +90,7 @@ Socket::listen(int32_t backlog)
      err = std::listen(poll_.fd, backlog);
 
      if (err)
-          throw SocketException(4, errno);
+          throw SocketException("listen", errno);
 
      return err;
 }
@@ -103,10 +103,10 @@ Socket::recv(void *buf, size_t buflen, int32_t flags)
      recv = std::recv(poll_.fd, buf, buflen, flags);
 
      if (recv == -1)
-          throw SocketException(5, errno);
+          throw SocketException("recv", errno);
 
      if (!recv)
-          throw SocketException(5, ENOLINK);
+          throw SocketException("recv", ENOLINK);
 
      return recv;
 }
@@ -121,7 +121,7 @@ Socket::recvfrom(void *buf, size_t buflen, int32_t flags)
      recv = std::recvfrom(poll_.fd, buf, buflen, flags, &rAddr_, &addrlen);
 
      if (recv == -1)
-          throw SocketException(6, errno);
+          throw SocketException("recvfrom", errno);
      
      return recv;
 }
@@ -136,7 +136,7 @@ Socket::pollin(int32_t timeout)
      fdr = std::poll(&poll_, 1, timeout);
 
      if (fdr == -1)
-          throw SocketException(7, errno);
+          throw SocketException("pollin", errno);
      
      return fdr;
 }
@@ -149,7 +149,7 @@ Socket::send(const void *buf, size_t nbyte, int32_t flags)
      send = std::send(poll_.fd, buf, nbyte, flags);
 
      if (send == -1)
-          throw SocketException(8, errno);
+          throw SocketException("send", errno);
      
      return send;
 }   

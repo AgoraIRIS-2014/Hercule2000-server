@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <string>
 #include <exception>
 
 #ifndef SOCKETEXCEPTION_HH
@@ -6,15 +7,15 @@
 
 class SocketException : public std::exception {
 public:
-     SocketException(int32_t number, int32_t nerror) throw();
+     SocketException(std::string name, int32_t error) throw();
 
      virtual const char *what() const throw();
-     int32_t getNerror() const throw();
-     int32_t getNumber() const throw();
+     std::string getName() const throw();
+     int32_t getError() const throw();
 
 private:
-     int32_t nerror_;
-     int32_t number_;
+     std::string name_;
+     int32_t error_;
 };
 
 #endif
