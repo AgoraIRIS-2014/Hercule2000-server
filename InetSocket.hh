@@ -11,6 +11,7 @@ public:
      InetSocket(int32_t type, int32_t protocol);
      InetSocket(int32_t fd);
 
+     void clearRemoteAddr();
      uint32_t getLocalAddr();
      uint32_t getLocalAddr(std::string& addr);
      uint32_t getRemoteAddr();

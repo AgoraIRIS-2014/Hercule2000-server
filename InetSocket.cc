@@ -6,14 +6,16 @@
 
 InetSocket::InetSocket(int32_t type, int32_t protocol)
      : Socket(PF_INET, type, protocol),
-       remoteAddr_((sockaddr_in *) &rAddr_), localAddr_((sockaddr_in *) &lAddr_)
-{
-}
+       remoteAddr_((sockaddr_in *) &rAddr_), localAddr_((sockaddr_in *) &lAddr_) {}
 
 InetSocket::InetSocket(int32_t fd)
      : Socket(fd),
-       remoteAddr_((sockaddr_in *) &rAddr_), localAddr_((sockaddr_in *) &lAddr_)
+       remoteAddr_((sockaddr_in *) &rAddr_), localAddr_((sockaddr_in *) &lAddr_) {}
+
+void
+InetSocket::clearRemoteAddr()
 {
+     remoteAddr_->sin_addr.s_addr = 0;
 }
 
 uint32_t

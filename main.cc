@@ -38,7 +38,7 @@ main()
      config::netAddr = "*";
      config::serialDev = "/dev/ttyUSB0";
      config::tmpdir = "/tmp/hercule/";
-     config::maxClients = 2;
+     config::maxClients = 3;
      config::tcpPort = 4242;
      config::udpPort = 42117;
 

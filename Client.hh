@@ -23,25 +23,25 @@ public:
      Client(int32_t fd);
      ~Client();
 
-     void closeTmpFile();
-     void createTmpFile(std::string filename);
-     void deleteTmpFile();
+     void createFile(std::string filename);
+     void deleteFile();
      bool fileIsOpen();
      std::string getID();
      int8_t getMode();
-     void makeFile();
      void master();
+     void readFile(std::string filename);
+     void saveFile();
      void sendList();
      void setID(std::string id);
      void setMode(int8_t mode);
      void wait();
-     void writeTmpFile(std::string data);
+     void writeFile(std::string data);
 
      static void thread(int32_t fd, uint32_t rAddr, bool *alive);
 
 private:
      std::string filename_;
-     std::fstream tmpfile_;
+     std::fstream file_;
      std::string id_;
      int8_t mode_;
 };

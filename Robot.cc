@@ -44,6 +44,7 @@ Robot::move()
          !env::client->fileIsOpen())
           throw RobotException("move", ENOENT);
 
+     std::cout << "move : " << env::move; // debug
      //send(env::move.data(), env::move.size());
      //read(&buf, sizeof buf);
 
@@ -60,7 +61,7 @@ Robot::move()
           env::posAxes.t += env::mvAxes[0].t;
           
           if (env::client != NULL && env::client->getMode() == MODE_L)
-               env::client->writeTmpFile(env::move);
+               env::client->writeFile(env::move);
      }
 
      std::memset(&env::mvAxes, 0, sizeof env::mvAxes);

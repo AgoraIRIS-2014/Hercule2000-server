@@ -39,22 +39,33 @@ TcpParser::parse()
                          cli_->setMode(MODE_M);
                     else if (data_ == "GET:LIST")
                          cli_->sendList();
-                    else if (mode == MODE_A);
-                    else if (mode == MODE_L) {
+                    else if (env::client == cli_) {
 
-                         if (!data_.compare(0, 9, "FILENAME:"))
-                              cli_->createTmpFile(data_.substr(9, std::string::npos));
-                         else if (data_ == "CHECKPOINT")
-                              cli_->makeFile();
-                         else if (data_ == "EOF") {
-                              cli_->makeFile();
-                              cli_->deleteTmpFile();
+                         if (data_ == "POSINIT") {
                               env::posinit();
                               env::flag = 1;
-                         }
+                         } else if (mode == MODE_A) {
+                              if (!data_.compare(0, 9, "FILENAME:"))
+                                   cli_->readFile(data_.substr(9, std::string::npos));
+                         } else if (mode == MODE_L) {
+
+                              if (!data_.compare(0, 9, "FILENAME:"))
+                                   cli_->createFile(data_.substr(9, std::string::npos));
+                              else if (data_ == "CHECKPOINT")
+                                   cli_->saveFile();
+                              else if (data_ == "EOF") {
+                                   cli_->saveFile();
+                                   cli_->deleteFile();
+                                   env::posinit();
+                                   env::flag = 1;
+                              }
+
+                         } else
+                              throw TcpParserException("parse", EINVAL);
 
                     } else
-                         throw TcpParserException("parse", EINVAL);
+                         throw TcpParserException("parse", EACCES);
+
                }
           } catch (const ClientException& e) {
                throw TcpParserException("parse", e.getError());

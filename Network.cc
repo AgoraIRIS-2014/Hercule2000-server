@@ -6,6 +6,7 @@
 #include <mutex>
 #include <thread>
 #include <sys/types.h>
+#include "c/fcntl.hh"
 #include "config.hh"
 #include "env.hh"
 #include "Client.hh"
@@ -49,15 +50,15 @@ Network::accept()
 void
 Network::appendClient(int32_t fd)
 {
-     if (fd > 0) {
-          client_.push_back(new bool);
+     client_.push_back(new bool);
                  
-          *client_.back() = true;
+     *client_.back() = true;
                                   
-          std::thread client(Client::thread, fd, getRemoteAddr(),
-                             client_.back());
-          client.detach();
-     }
+     std::thread client(Client::thread, fd, getRemoteAddr(),
+                        client_.back());
+     client.detach();
+
+     clearRemoteAddr();
 }
 
 void
@@ -80,6 +81,7 @@ Network::close()
 void
 Network::tcpThread()
 {
+     std::list<Client *>::iterator it;
      int32_t fd;
 
      Network net(TCP, config::tcpPort);
@@ -88,7 +90,31 @@ Network::tcpThread()
 
      for (;;) {
           fd = net.accept();
-          net.appendClient(fd);
+
+          try {
+               if (fd > 0) {
+                    env::mtx.lock();
+                    if (env::client != NULL) {
+                         if (env::client->getRemoteAddr() == net.getRemoteAddr())
+                              throw NetworkException("tcpThread", 20);
+                    }
+
+                    it = env::cliQueue.begin();
+                    while (it != env::cliQueue.end()) {
+                         if ((*it)->getRemoteAddr() == net.getRemoteAddr())
+                              throw NetworkException("tcpThread", EADDRINUSE);
+
+                         it++;
+                    }
+                    env::mtx.unlock();
+                    net.appendClient(fd);
+               }
+          } catch (const NetworkException e) {
+               env::mtx.unlock();
+               std::close(fd);
+               std::cerr << e.what() << std::endl;
+          }
+
           net.close();
      }
 }
