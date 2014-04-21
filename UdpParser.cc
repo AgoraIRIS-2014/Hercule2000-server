@@ -7,15 +7,13 @@
 #include "UdpParser.hh"
 #include "UdpParserException.hh"
 
-#include <iostream> // debug
-#include <thread> // debug
-
 UdpParser::UdpParser(const char *data) : Parser(data) {}
 
 void
 UdpParser::checkMove(char *move, char **posss)
 {
-     char *i, *find;
+     char *find;
+     char *i;
 
      find = std::strpbrk(move, "BCEPRT");
 
@@ -51,8 +49,12 @@ void
 UdpParser::parse()
 {
      size_t numc;
-     int16_t div, ipos, isp;
-     char *buf, *cmd, *posss;
+     int16_t div; 
+     int16_t ipos; 
+     int16_t isp;
+     char *buf;
+     char *cmd;
+     char *posss;
 
      cmd = std::strtok((char *) data_.data(), ";");
 
@@ -61,7 +63,7 @@ UdpParser::parse()
 
           ipos = parseMove(cmd, posss);
           isp = parseSpeed(cmd, posss);
-          
+
           div = ipos;
           numc = 0;
           do {
@@ -107,7 +109,8 @@ UdpParser::parseMove(char *move, char *posss)
 {
      size_t numc;
      int16_t ipos;
-     char *i, *pos;
+     char *i;
+     char *pos;
 
      numc = 0;
      for (i = &move[1]; i < posss; i++)
@@ -158,7 +161,8 @@ UdpParser::parseSpeed(char *move, char *posss)
 {
      size_t numc;
      uint8_t isp;
-     char *i, *sp;
+     char *i;
+     char *sp;
 
      numc = 0;
      for (i = posss; i < &move[std::strlen(move)]; i++)

@@ -8,6 +8,8 @@
 #include "Socket.hh"
 #include "SocketException.hh"
 
+#include <iostream> // debug
+
 Socket::Socket(int32_t domain, int32_t type, int32_t protocol)
 {
      lAddr_.sa_family = domain;
@@ -108,6 +110,8 @@ Socket::recv(void *buf, size_t buflen, int32_t flags)
      if (!recv)
           throw SocketException("recv", ENOLINK);
 
+     std::cout << "Socket::recv : " << (const char *) buf; // debug
+
      return recv;
 }
 
@@ -122,6 +126,8 @@ Socket::recvfrom(void *buf, size_t buflen, int32_t flags)
 
      if (recv == -1)
           throw SocketException("recvfrom", errno);
+
+     std::cout << "Socket::recvfrom : " << (const char *) buf; // debug
      
      return recv;
 }
@@ -150,6 +156,8 @@ Socket::send(const void *buf, size_t nbyte, int32_t flags)
 
      if (send == -1)
           throw SocketException("send", errno);
+
+     std::cout << "Socket::send : " << (const char *) buf; // debug
      
      return send;
 }   

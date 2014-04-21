@@ -11,7 +11,7 @@ public:
      TcpParser(Client& cli, const char *data);
      
      virtual void parse();
-     void helloRep(Client& cli);
+     void hello(Client& cli);
      void setMaster(std::string id, Client& cli);
 
 private:

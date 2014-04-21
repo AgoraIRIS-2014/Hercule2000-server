@@ -1,5 +1,6 @@
 #include <cstring>
 #include <chrono>
+#include <iostream>
 #include <string>
 #include <thread>
 #include <sys/types.h>
@@ -10,26 +11,21 @@
 #include "Robot.hh"
 #include "RobotException.hh"
 
-#include <iostream> // debug
-
 Robot::Robot(const struct termios serialConf)
      : Serial(config::serialDev, serialConf) {}
-
-Robot::~Robot() {}
 
 void
 Robot::init()
 {
-     //char rd[11];
-     //char r = 'r';
-     //char l = 'L';
+     char rd[11];
+     char r = 'r';
+     char l = 'L';
 
      //send(&r, 1);
      //read(&rd, 11);
      //send(&l, 1);
      std::this_thread::sleep_for(std::chrono::seconds(1));
-     
-     // Positionnement du robot en position initial
+
      env::posinit();
      move();
      env::flag = 0;
@@ -39,34 +35,57 @@ void
 Robot::move()
 {
      int16_t buf;
-     
-     if (env::client != NULL && env::client->getMode() == MODE_L &&
-         !env::client->fileIsOpen())
-          throw RobotException("move", ENOENT);
 
-     std::cout << "move : " << env::move; // debug
-     //send(env::move.data(), env::move.size());
-     //read(&buf, sizeof buf);
+     if (env::move[0] != '\n') {
+          if (env::client != NULL && env::client->getMode() == MODE_L &&
+              !env::client->fileIsOpen())
+               throw RobotException("move", ENOENT);
 
-     //std::cout << "buf = " << buf << std::endl; // debug
-
-     buf = 0x0A; // debug
-     // non testé 
-     if (buf == 0x0A) {
-          env::posAxes.b += env::mvAxes[0].b;
-          env::posAxes.c += env::mvAxes[0].c;
-          env::posAxes.e += env::mvAxes[0].e;
-          env::posAxes.p += env::mvAxes[0].p;
-          env::posAxes.r += env::mvAxes[0].r;
-          env::posAxes.t += env::mvAxes[0].t;
+          //send(env::move.data(), env::move.size());
+          //read(&buf, sizeof buf);
           
-          if (env::client != NULL && env::client->getMode() == MODE_L)
-               env::client->writeFile(env::move);
+          buf = 0x4300; // debug
+
+          if (buf == 0x4300) {
+               if ((env::posAxes.b += env::mvAxes[0].b) < -511)
+                    env::posAxes.b = -511;
+               else if (env::posAxes.b > 511)
+                    env::posAxes.b = 511 ;
+
+               if ((env::posAxes.c += env::mvAxes[0].c) < -511)
+                    env::posAxes.c = -511;
+               else if (env::posAxes.c > 511)
+                    env::posAxes.c = 511 ;
+
+               if ((env::posAxes.e += env::mvAxes[0].e) < -511)
+                    env::posAxes.e = -511;
+               else if (env::posAxes.e > 511)
+                    env::posAxes.e = 511 ;
+
+               if ((env::posAxes.p += env::mvAxes[0].p) < -511)
+                    env::posAxes.p = -511;
+               else if (env::posAxes.p > 511)
+                    env::posAxes.p = 511 ;
+
+               if ((env::posAxes.r += env::mvAxes[0].r) < -511)
+                    env::posAxes.r = -511;
+               else if (env::posAxes.r > 511)
+                    env::posAxes.r = 511 ;
+
+               if ((env::posAxes.t += env::mvAxes[0].t) < -511)
+                    env::posAxes.t = -511;
+               else if (env::posAxes.t > 511)
+                    env::posAxes.t = 511;
+
+               if (env::client != NULL && env::client->getMode() == MODE_L)
+                    env::client->writeFile(env::move);
+           }
+
+          std::memset(&env::mvAxes, 0, sizeof env::mvAxes);
+
+          std::cout << "Robot::move : " << env::move; // debug
+          env::move.clear();
      }
-
-     std::memset(&env::mvAxes, 0, sizeof env::mvAxes);
-
-     env::move.clear();
 }
 
 ssize_t
@@ -112,26 +131,20 @@ Robot::thread()
 {
      struct termios serialConf;
     
-     // Configuration du port série
      serialConf.c_iflag = 0;
      serialConf.c_oflag = 0;
      serialConf.c_cflag = CS8 | CREAD | CLOCAL;
      serialConf.c_lflag = 0;
-     // Aucun caractère de contrôle
      std::memset(serialConf.c_cc, 0, NCCS);
-     // Vitesse régler sur 9600 bauds en entrée et sortie 
      std::cfsetspeed(&serialConf, B9600);
     
      Robot Hercule(serialConf);
      env::mtx.lock();
-     //std::cout << "Robot::thread lock 1" << std::endl; // debug
      Hercule.init();
      env::mtx.unlock();
-     //std::cout << "Robot::thread lock 1" << std::endl; // debug
 
      for (;;) {
           env::mtx.lock();
-          //std::cout << "Robot::thread lock 2" << std::endl; // debug
           try {
                if (env::flag == 1) {
                     Hercule.move();
@@ -142,6 +155,5 @@ Robot::thread()
                std::cerr << e.what() << std::endl;
           }
           env::mtx.unlock();
-          //std::cout << "Robot::thread unlock 2" << std::endl; // debug
      }
 }

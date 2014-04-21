@@ -4,9 +4,7 @@
 #include "SocketException.hh"
 
 SocketException::SocketException(std::string name, int32_t error) throw()
-     :  name_(name), error_(error)
-{
-}
+     :  name_(name), error_(error) {}
 
 const char *
 SocketException::what() const throw()

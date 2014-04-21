@@ -18,6 +18,7 @@ struct env {
      static struct botaxes posAxes;
      static struct botaxes mvAxes[2];
      static int8_t flag;
+     static int8_t run;
 
      static void posinit();
 };

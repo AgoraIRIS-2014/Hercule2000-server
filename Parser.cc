@@ -19,5 +19,7 @@ Parser::check()
           throw ParserException("check", EINVAL);
      
      data_ = data_.substr(0, fcp);
-     std::cout << data_ << std::endl; // debug
+
+     if (data_ == "")
+          throw ParserException("check", EINVAL);
 }

@@ -1,11 +1,13 @@
 #include <cerrno>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <list>
 #include <mutex>
 #include <thread>
 #include <sys/types.h>
+#include "c/arpa/inet.hh"
 #include "c/fcntl.hh"
 #include "config.hh"
 #include "env.hh"
@@ -18,8 +20,10 @@
 
 Network::Network(int32_t type, uint16_t port) : InetSocket(type, 0)
 {
-     if (config::netAddr == "*")
+     if (config::tcpAddr == "*")
           setLocalAddr(INADDR_ANY);
+     else
+          setLocalAddr(std::inet_addr(config::tcpAddr.data()));
 
      setLocalPort(port);
 
@@ -96,17 +100,18 @@ Network::tcpThread()
                     env::mtx.lock();
                     if (env::client != NULL) {
                          if (env::client->getRemoteAddr() == net.getRemoteAddr())
-                              throw NetworkException("tcpThread", 20);
+                              throw NetworkException("tcpThread", EADDRINUSE);
                     }
 
                     it = env::cliQueue.begin();
-                    while (it != env::cliQueue.end()) {
+                    while (it != env::cliQueue.end() && *it != NULL) {
                          if ((*it)->getRemoteAddr() == net.getRemoteAddr())
                               throw NetworkException("tcpThread", EADDRINUSE);
 
                          it++;
                     }
                     env::mtx.unlock();
+
                     net.appendClient(fd);
                }
           } catch (const NetworkException e) {
@@ -128,14 +133,18 @@ Network::udpThread()
 
      for (;;) {
           try {
+               std::memset(buf, 0, sizeof buf);
                net.recvfrom(buf, sizeof buf);
 
                env::mtx.lock();
-               //std::cout << "Network::udpThread lock" << std::endl; // debug
                if (env::client == NULL)
                     throw NetworkException("udpThread", EACCES);
 
                if (env::client->getMode() <= MODE_A)
+                    throw NetworkException("udpThread", EACCES);
+
+               if (env::client->getMode() == MODE_L
+                   && !env::client->fileIsOpen())
                     throw NetworkException("udpThread", EACCES);
 
                if (net.getRemoteAddr() != env::client->getRemoteAddr())
@@ -152,10 +161,8 @@ Network::udpThread()
                     }
                }
                env::mtx.unlock();
-               //std::cout << "Network::udpthread unlock" << std::endl; // debug
           } catch (const NetworkException& e) {
                env::mtx.unlock();
-               //std::cout << "Network::udpthread unlock" << std::endl; // debug
                std::cerr << e.what() << std::endl;
           }
      }

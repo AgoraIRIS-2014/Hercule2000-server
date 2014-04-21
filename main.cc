@@ -9,41 +9,30 @@
 #include "Network.hh"
 #include "Robot.hh"
 
-#include <iostream> // debug
-
-std::string config::camAddr;
-std::string config::dir;
-std::string config::serialDev;
-std::string config::netAddr;
-std::string config::tmpdir;
-uint16_t config::maxClients;
-uint16_t config::tcpPort;
-uint16_t config::udpPort;
+std::string config::dir = "/tmp/hercule-final/";
+std::string config::serialDev = "/dev/ttyS0";
+std::string config::tcpAddr = "*";
+std::string config::tmpdir = "/tmp/hercule/";
+std::string config::udpAddr = "*";
+uint16_t config::maxClients = 3;
+uint16_t config::tcpPort = 4242;
+uint16_t config::udpPort = 42117;
 
 std::string env::move;
 std::list<Client *> env::cliQueue; 
-Client *env::client;
+Client *env::client = NULL;
 std::mutex env::mtx;
 struct botaxes env::posAxes;
 struct botaxes env::mvAxes[2];
-int8_t env::flag;
+int8_t env::flag = -1;
+int8_t env::run = 0;
 
 int32_t
 main()
 {
      std::string cmd;
 
-     config::camAddr = "192.168.0.35";
-     config::dir = "/tmp/hercule-final/";
-     config::netAddr = "*";
-     config::serialDev = "/dev/ttyUSB0";
-     config::tmpdir = "/tmp/hercule/";
-     config::maxClients = 3;
-     config::tcpPort = 4242;
-     config::udpPort = 42117;
-
-     env::client = NULL;
-     env::flag = -1;
+     env::cliQueue.push_front(env::client);
 
      cmd = "mkdir -p " + config::dir;
      std::system(cmd.data());

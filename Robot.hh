@@ -13,7 +13,6 @@
 class Robot : public Serial {
 public:
      Robot(const struct termios serialConf);
-     ~Robot();
 
      void init();
      void make();
@@ -22,8 +21,6 @@ public:
      ssize_t send(const void *buf, size_t nbyte);
 
      static void thread();
-
-private:
 };
 
 #endif

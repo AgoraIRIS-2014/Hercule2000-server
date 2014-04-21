@@ -6,24 +6,16 @@
 #include "c/unistd.hh"
 #include "Serial.hh"
 
-#include <iostream> //debug
-
 Serial::Serial(std::string dev, const struct termios& serialConf)
 {
-     // Ouverture du fichier associé au port série
      //fd_ = std::open(dev.data(), O_RDWR | O_NOCTTY);
-     //std::cout << "fd_ = " << fd_ << std::endl; // debug
-     // Sauvegarde des paramètres initiaux du port série
      //std::tcgetattr(fd_, &sysSerialConf_);
-     //
      //std::tcsetattr(fd_, TCSANOW, &serialConf);
 }
 
 Serial::~Serial()
 {
-     // Restauration des paramètres initiaux du port série
      std::tcsetattr(fd_, TCSANOW, &sysSerialConf_);
-     // Fermeture du fichier associé au port série
      std::close(fd_);
 }
 
