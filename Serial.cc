@@ -8,9 +8,9 @@
 
 Serial::Serial(std::string dev, const struct termios& serialConf)
 {
-     //fd_ = std::open(dev.data(), O_RDWR | O_NOCTTY);
-     //std::tcgetattr(fd_, &sysSerialConf_);
-     //std::tcsetattr(fd_, TCSANOW, &serialConf);
+     fd_ = std::open(dev.data(), O_RDWR | O_NOCTTY);
+     std::tcgetattr(fd_, &sysSerialConf_);
+     std::tcsetattr(fd_, TCSANOW, &serialConf);
 }
 
 Serial::~Serial()

@@ -21,9 +21,9 @@ Robot::init()
      char r = 'r';
      char l = 'L';
 
-     //send(&r, 1);
-     //read(&rd, 11);
-     //send(&l, 1);
+     send(&r, 1);
+     read(&rd, 11);
+     send(&l, 1);
      std::this_thread::sleep_for(std::chrono::seconds(1));
 
      env::posinit();
@@ -41,10 +41,8 @@ Robot::move()
               !env::client->fileIsOpen())
                throw RobotException("move", ENOENT);
 
-          //send(env::move.data(), env::move.size());
-          //read(&buf, sizeof buf);
-          
-          buf = 0x4300; // debug
+          send(env::move.data(), env::move.size());
+          read(&buf, sizeof buf);
 
           if (buf == 0x4300) {
                if ((env::posAxes.b += env::mvAxes[0].b) < -511)
@@ -83,7 +81,6 @@ Robot::move()
 
           std::memset(&env::mvAxes, 0, sizeof env::mvAxes);
 
-          std::cout << "Robot::move : " << env::move; // debug
           env::move.clear();
      }
 }
